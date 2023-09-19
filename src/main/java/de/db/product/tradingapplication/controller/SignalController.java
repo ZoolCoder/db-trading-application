@@ -39,7 +39,7 @@ public class SignalController {
    * @return A response indicating the result of signal processing.
    */
   @Operation(summary = " process a trading signal", description = "This api is used to process a trading signal")
-  @ApiResponse(responseCode = "200", description = "trading signal processed successfully", content = {@Content(schema = @Schema(implementation = SignalRequest.class), mediaType = MediaType.APPLICATION_JSON_VALUE)})
+  @ApiResponse(responseCode = "200", description = "trading signal processed successfully")
   @PostMapping("/signals")
   public ResponseEntity<String> processSignal(@RequestBody SignalRequest signalRequest) {
     try {
