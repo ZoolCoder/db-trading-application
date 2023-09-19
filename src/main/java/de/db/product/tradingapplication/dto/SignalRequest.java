@@ -1,4 +1,4 @@
-package de.db.product.tradingapplication.controller;
+package de.db.product.tradingapplication.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

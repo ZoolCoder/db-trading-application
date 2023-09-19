@@ -1,4 +1,4 @@
-package de.db.product.tradingapplication.service.command;
+package de.db.product.tradingapplication.command;
 
 import de.db.product.tradingapplication.invoker.Algo;
 

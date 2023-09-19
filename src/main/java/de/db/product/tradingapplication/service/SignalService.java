@@ -3,8 +3,8 @@ package de.db.product.tradingapplication.service;
 import de.db.product.tradingapplication.exceptions.InvalidSignalException;
 import de.db.product.tradingapplication.exceptions.SignalProcessingException;
 import de.db.product.tradingapplication.invoker.Algo;
-import de.db.product.tradingapplication.service.command.SignalCommand;
-import de.db.product.tradingapplication.service.command.SignalCommandFactory;
+import de.db.product.tradingapplication.command.SignalCommand;
+import de.db.product.tradingapplication.command.SignalCommandFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
