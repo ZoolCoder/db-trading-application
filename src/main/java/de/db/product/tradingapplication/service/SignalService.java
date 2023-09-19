@@ -38,7 +38,7 @@ public class SignalService {
 
     try {
       // Signal processing logic
-      SignalCommand command = commandFactory.createCommand(signal, algo);
+      SignalCommand command = commandFactory.createCommand(signal);
       command.execute();
     } catch (Exception e) {
       throw new SignalProcessingException("Error processing signal", e);

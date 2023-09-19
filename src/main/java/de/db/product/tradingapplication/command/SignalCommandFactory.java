@@ -1,7 +1,11 @@
 package de.db.product.tradingapplication.command;
 
 import de.db.product.tradingapplication.invoker.Algo;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import java.util.Map;
 
 /**
  * Factory for creating SignalCommand instances based on signal type.
@@ -11,23 +15,20 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SignalCommandFactory {
-  /**
-   * Creates a SignalCommand based on the given signal type.
-   *
-   * @param signal The type of signal.
-   * @param algo   The Algo instance for executing the signal.
-   * @return A SignalCommand for the specified signal type.
-   */
-  public SignalCommand createCommand(int signal, Algo algo) {
-    switch (signal) {
-      case 1:
-        return new Signal1Command(algo);
-      case 2:
-        return new Signal2Command(algo);
-      case 3:
-        return new Signal3Command(algo);
-      default:
-        return new DefaultSignalCommand(algo);
-    }
+
+  @Autowired
+  private Algo algo;
+
+  private final Map<Integer, SignalCommand> commandMap;
+
+  @Autowired
+  public SignalCommandFactory(List<SignalCommand> signalCommands) {
+    this.commandMap = signalCommands
+        .stream()
+        .collect(Collectors.toMap(SignalCommand::getSignalType, command -> command));
+  }
+
+  public SignalCommand createCommand(int signal) {
+    return commandMap.getOrDefault(signal, new DefaultSignalCommand(algo));
   }
 }
