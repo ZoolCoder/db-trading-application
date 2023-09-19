@@ -1,8 +1,13 @@
 package de.db.product.tradingapplication.controller;
 
 import de.db.product.tradingapplication.service.SignalService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +38,8 @@ public class SignalController {
    * @param signalRequest The request body containing the trading signal to be processed.
    * @return A response indicating the result of signal processing.
    */
+  @Operation(summary = " process a trading signal", description = "This api is used to process a trading signal")
+  @ApiResponse(responseCode = "201", description = "trading signal processed successfully", content = {@Content(schema = @Schema(implementation = SignalRequest.class), mediaType = MediaType.APPLICATION_JSON_VALUE)})
   @PostMapping("/signals")
   public ResponseEntity<String> processSignal(@RequestBody SignalRequest signalRequest) {
     try {
