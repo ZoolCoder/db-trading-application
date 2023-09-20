@@ -48,4 +48,23 @@ public class SignalController {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Signal processing failed");
     }
   }
+
+  /**
+   * Handles an HTTP POST request to process a trading signal.
+   *
+   * @param signalRequest The request body containing the trading signal to be processed.
+   * @return A response indicating the result of signal processing.
+   */
+  @Operation(summary = " process a trading signal", description = "This api is used to process a trading signal")
+  @ApiResponse(responseCode = "200", description = "trading signal processed successfully")
+  @PostMapping("/configureSignals")
+  public ResponseEntity<String> executeWorkflowForSignal(@RequestBody SignalRequest signalRequest) {
+    try {
+      signalService.executeWorkflowForSignal(signalRequest.getSignal());
+      return ResponseEntity.ok("Signal processed successfully");
+    } catch (Exception e) {
+      System.out.println(e);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Signal processing failed");
+    }
+  }
 }

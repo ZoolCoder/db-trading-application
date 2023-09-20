@@ -5,6 +5,7 @@ import de.db.product.tradingapplication.exceptions.SignalProcessingException;
 import de.db.product.tradingapplication.invoker.Algo;
 import de.db.product.tradingapplication.command.SignalCommand;
 import de.db.product.tradingapplication.command.SignalCommandFactory;
+import de.db.product.tradingapplication.workflow.SignalWorkflowHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +18,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class SignalService {
   private SignalCommandFactory commandFactory;
+  private SignalWorkflowHandler workflowHandler;
   private Algo algo;
 
   @Autowired
-  public SignalService(SignalCommandFactory commandFactory, Algo algo) {
+  public SignalService(SignalCommandFactory commandFactory, SignalWorkflowHandler workflowHandler, Algo algo) {
     this.commandFactory = commandFactory;
+    this.workflowHandler = workflowHandler;
     this.algo = algo;
   }
 
@@ -43,5 +46,14 @@ public class SignalService {
     } catch (Exception e) {
       throw new SignalProcessingException("Error processing signal", e);
     }
+  }
+
+  /**
+   * Loads and executes a workflow for a given command.
+   *
+   * @param Signal The command for which to execute the workflow.
+   */
+  public void executeWorkflowForSignal(Integer Signal) {
+    workflowHandler.executeWorkflow(Signal);
   }
 }
