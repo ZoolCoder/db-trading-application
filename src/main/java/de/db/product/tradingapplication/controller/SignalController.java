@@ -4,6 +4,7 @@ import de.db.product.tradingapplication.dto.SignalRequest;
 import de.db.product.tradingapplication.service.SignalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,16 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Abdallah Emad.
  * @since 19-9-2023
  */
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
 public class SignalController {
 
   private final SignalService signalService;
-
-  @Autowired
-  public SignalController(SignalService signalService) {
-    this.signalService = signalService;
-  }
 
   /**
    * Handles an HTTP POST request to process a trading signal.

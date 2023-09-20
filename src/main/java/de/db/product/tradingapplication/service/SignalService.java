@@ -6,6 +6,8 @@ import de.db.product.tradingapplication.invoker.Algo;
 import de.db.product.tradingapplication.command.SignalCommand;
 import de.db.product.tradingapplication.command.SignalCommandFactory;
 import de.db.product.tradingapplication.workflow.SignalWorkflowHandler;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,18 +17,12 @@ import org.springframework.stereotype.Service;
  * @author Abdallah Emad.
  * @since 19-9-2023
  */
+@RequiredArgsConstructor
 @Service
 public class SignalService {
-  private SignalCommandFactory commandFactory;
-  private SignalWorkflowHandler workflowHandler;
-  private Algo algo;
-
-  @Autowired
-  public SignalService(SignalCommandFactory commandFactory, SignalWorkflowHandler workflowHandler, Algo algo) {
-    this.commandFactory = commandFactory;
-    this.workflowHandler = workflowHandler;
-    this.algo = algo;
-  }
+  private final SignalCommandFactory commandFactory;
+  private final SignalWorkflowHandler workflowHandler;
+  private final Algo algo;
 
   /**
    * Processes a trading signal.

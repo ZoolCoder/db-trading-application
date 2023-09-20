@@ -1,6 +1,7 @@
 package de.db.product.tradingapplication.command;
 
 import de.db.product.tradingapplication.invoker.Algo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,20 +12,12 @@ import org.springframework.stereotype.Component;
  * @author Abdallah Emad.
  * @since 19-9-2023
  */
+@RequiredArgsConstructor
 @Component
 public class Signal3Command implements SignalCommand {
 
   private final Algo algo;
   private static final Integer SIGNAL_TYPE = 3;
-
-  /**
-   * Constructs a Signal3Command with the specified Algo instance.
-   *
-   * @param algo The Algo instance for executing the signal.
-   */
-  public Signal3Command(Algo algo) {
-    this.algo = algo;
-  }
 
   /**
    * Executes the trading signal command for Signal 3.
