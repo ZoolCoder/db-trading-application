@@ -1,22 +1,26 @@
 package de.db.product.tradingapplication.workflow;
+import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.yaml.snakeyaml.Yaml;
 
+@RequiredArgsConstructor
+@Component
 public class WorkflowConfigReader {
-  private static WorkflowConfigReader instance = null;
 
-  private WorkflowConfigReader() {}
+  private static final String filePath = "signal-workflow.yaml";
 
-  public static WorkflowConfigReader getInstance() {
-    if (instance == null) {
-      instance = new WorkflowConfigReader();
-    }
-    return instance;
+  private final WorkflowConfigKey workflowConfigKey;
+  private Map<Integer, List<Action>> workflowConfig;
+  @PostConstruct
+  public void init() {
+    System.out.println("Initializing WorkflowConfig...");
+    workflowConfig = readWorkflowConfig(filePath);
   }
-
   public Map<Integer, List<Action>> readWorkflowConfig(String filePath) {
     Map<String, List<Map<String, Object>>> workflowConfig = null;
 
@@ -37,14 +41,15 @@ public class WorkflowConfigReader {
     Map<Integer, List<Action>> result = new HashMap<>();
 
     config.forEach((signalKey, signalConfigList) -> {
+
       List<Action> actions = signalConfigList.stream()
           .map(signalConfig -> {
-            Integer signal = (Integer) signalConfig.get("signal");
-            List<Map<String, Object>> actionList = (List<Map<String, Object>>) signalConfig.get("actions");
+            Integer signal = (Integer) signalConfig.get(workflowConfigKey.SIGNAL);
+            List<Map<String, Object>> actionList = (List<Map<String, Object>>) signalConfig.get(workflowConfigKey.ACTIONS);
 
             List<Action> actionObjects = actionList.stream()
                 .map(actionConfig -> {
-                  return new Action((String) actionConfig.get("action"), parseParameters(actionConfig.get("params")));
+                  return new Action((String) actionConfig.get(workflowConfigKey.ACTION), parseParameters(actionConfig.get(workflowConfigKey.PARAMS)));
                 })
                 .collect(Collectors.toList());
 
@@ -59,8 +64,8 @@ public class WorkflowConfigReader {
   }
 
   private Action parseAction(Map<String, Object> actionConfig) {
-    String actionName = (String) actionConfig.get("action");
-    List<Parameter> parameters = parseParameters(actionConfig.get("params"));
+    String actionName = (String) actionConfig.get(workflowConfigKey.ACTION);
+    List<Parameter> parameters = parseParameters(actionConfig.get(workflowConfigKey.PARAMS));
 
     return new Action(actionName, parameters);
   }
@@ -76,10 +81,14 @@ public class WorkflowConfigReader {
   }
 
   private Parameter parseParameter(Map<String, Object> paramConfig) {
-    String paramName = (String) paramConfig.get("name");
-    String paramType = (String) paramConfig.get("type");
-    Object paramValue = paramConfig.get("value");
+    String paramName = (String) paramConfig.get(workflowConfigKey.PARAM_NAME);
+    String paramType = (String) paramConfig.get(workflowConfigKey.PARAM_TYPE);
+    Object paramValue = paramConfig.get(workflowConfigKey.PARAM_VALUE);
 
     return new Parameter(paramName, paramType, paramValue);
+  }
+
+  public List<Action> getWorkflow(Integer signal) {
+    return workflowConfig.getOrDefault(signal, List.of());
   }
 }

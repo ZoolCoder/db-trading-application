@@ -1,8 +1,6 @@
 package de.db.product.tradingapplication.workflow;
 
-
-import java.util.List;
-import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,16 +10,12 @@ import org.springframework.stereotype.Component;
  * @since 20-9-2023
  */
 
+@RequiredArgsConstructor
 @Component
 public class SignalWorkflowHandler {
 
-  private static final String filePath = "signal-workflow.yaml";
-
+  private final WorkflowConfigReader reader;
   public void executeWorkflow(Integer Signal) {
-    WorkflowConfigReader reader = WorkflowConfigReader.getInstance();
-    Map<Integer, List<Action>> workflowConfig = reader.readWorkflowConfig(filePath);
-    SignalExecutor executor = new SignalExecutor();
-    List<Action> actions = workflowConfig.getOrDefault(Signal, List.of());
-    actions.forEach(executor::executeAction);
+    reader.getWorkflow(Signal).forEach(new SignalExecutor()::executeAction);
   }
 }

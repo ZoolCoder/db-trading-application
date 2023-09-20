@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: employee-device-registry
+  server:
+    port: 8080
+
+# OPENAPI Swagger
+openapi:
+  dev-url: http://localhost:8080
+  prod-url: https://www.db.de
+
+# Workflow configuration key
+workflow:
+  config:
+    signal: signal
+    actions: actions
+    action: action
+    params: params
+    param:
+      name: name
+      type: type
+      value: value
