@@ -7,6 +7,6 @@ import java.util.List;
  * @author Abdallah Emad.
  * @since 21-9-2023
  */
-public record WorkflowDTO(int signalID, List<WorkflowActionDTO> actions) {
+public record WorkflowDTO(long id, int signalID, List<WorkflowActionDTO> actions) {
 
 }

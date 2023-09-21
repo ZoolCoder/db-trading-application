@@ -27,9 +27,9 @@ public class WorkflowConverter {
           .map(actionConverter::toDTO)
           .collect(Collectors.toList());
 
-      return new WorkflowDTO(workflow.getSignalID(), workflowActionDTOS);
+      return new WorkflowDTO(workflow.getId(), workflow.getSignalID(), workflowActionDTOS);
     } else {
-      return new WorkflowDTO(workflow.getSignalID(), null);
+      return new WorkflowDTO(workflow.getId(), workflow.getSignalID(), null);
     }
   }
 
