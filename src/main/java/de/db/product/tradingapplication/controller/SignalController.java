@@ -1,7 +1,11 @@
 package de.db.product.tradingapplication.controller;
 
 import de.db.product.tradingapplication.dto.SignalRequest;
+import de.db.product.tradingapplication.dto.WorkflowDTO;
+import de.db.product.tradingapplication.dto.WorkflowExecutionRequest;
 import de.db.product.tradingapplication.service.SignalService;
+import de.db.product.tradingapplication.service.WorkflowService;
+import de.db.product.tradingapplication.workflow.SignalExecutor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/signal")
 public class SignalController {
 
   private final SignalService signalService;
@@ -33,13 +37,13 @@ public class SignalController {
    * @param signalRequest The request body containing the trading signal to be processed.
    * @return A response indicating the result of signal processing.
    */
-  @Operation(summary = " process a trading signal", description = "This api is used to process a trading signal")
+  @Operation(summary = " process a trading signal from Command classes", description = "This api is used to process a trading signal from Command classes")
   @ApiResponse(responseCode = "200", description = "trading signal processed successfully")
-  @PostMapping("/signals")
+  @PostMapping("/process")
   public ResponseEntity<String> processSignal(@RequestBody SignalRequest signalRequest) {
     try {
       int signal = signalRequest.getSignal();
-      signalService.processSignal(signal);
+      signalService.process(signal);
       return ResponseEntity.ok("Signal processed successfully");
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Signal processing failed");
@@ -52,12 +56,25 @@ public class SignalController {
    * @param signalRequest The request body containing the trading signal to be processed.
    * @return A response indicating the result of signal processing.
    */
-  @Operation(summary = " process a trading signal", description = "This api is used to process a trading signal")
+  @Operation(summary = " process a trading signal from a configure workflow", description = "This api is used to process a trading signal from a configure workflow")
   @ApiResponse(responseCode = "200", description = "trading signal processed successfully")
-  @PostMapping("/configureSignals")
-  public ResponseEntity<String> executeWorkflowForSignal(@RequestBody SignalRequest signalRequest) {
+  @PostMapping("/processConfigureWorkflow")
+  public ResponseEntity<String> processConfigureWorkflow(@RequestBody SignalRequest signalRequest) {
     try {
-      signalService.executeWorkflowForSignal(signalRequest.getSignal());
+      signalService.processConfigureWorkflow(signalRequest.getSignal());
+      return ResponseEntity.ok("Signal processed successfully");
+    } catch (Exception e) {
+      System.out.println(e);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Signal processing failed");
+    }
+  }
+
+  @Operation(summary = " process a trading signal from a stored workflow", description = "This api is used to process a trading signal from a stored workflow")
+  @ApiResponse(responseCode = "200", description = "trading signal processed successfully")
+  @PostMapping("/processStoredWorkflow")
+  public ResponseEntity<String> processStoredWorkflow(@RequestBody WorkflowExecutionRequest request) {
+    try {
+      signalService.processStoredWorkflow(request.signalID());
       return ResponseEntity.ok("Signal processed successfully");
     } catch (Exception e) {
       System.out.println(e);
