@@ -15,14 +15,14 @@ import org.yaml.snakeyaml.Yaml;
 @Component
 public class WorkflowConfigReader {
 
-  private static final String filePath = "signal-workflow.yaml";
+  private static final String WORKFLOW_CONFIGURATION = "signal-workflow.yaml";
 
   private final WorkflowConfigKey workflowConfigKey;
   private Map<Integer, List<WorkflowActionDTO>> workflowConfig;
   @PostConstruct
   public void init() {
     System.out.println("Initializing WorkflowConfig...");
-    workflowConfig = readWorkflowConfig(filePath);
+    workflowConfig = readWorkflowConfig(WORKFLOW_CONFIGURATION);
   }
   public Map<Integer, List<WorkflowActionDTO>> readWorkflowConfig(String filePath) {
     Map<String, List<Map<String, Object>>> workflowConfig = null;
@@ -47,12 +47,12 @@ public class WorkflowConfigReader {
 
       signalConfigList.stream()
           .map(signalConfig -> {
-            Integer signal = (Integer) signalConfig.get(workflowConfigKey.SIGNAL);
-            List<Map<String, Object>> actionList = (List<Map<String, Object>>) signalConfig.get(workflowConfigKey.ACTIONS);
+            Integer signal = (Integer) signalConfig.get(workflowConfigKey.signal);
+            List<Map<String, Object>> actionList = (List<Map<String, Object>>) signalConfig.get(workflowConfigKey.actions);
 
             List<WorkflowActionDTO> workflowActionDTOObjects = actionList.stream()
                 .map(actionConfig -> {
-                  return new WorkflowActionDTO((String) actionConfig.get(workflowConfigKey.ACTION), parseParameters(actionConfig.get(workflowConfigKey.PARAMS)));
+                  return new WorkflowActionDTO((String) actionConfig.get(workflowConfigKey.action), parseParameters(actionConfig.get(workflowConfigKey.params)));
                 })
                 .collect(Collectors.toList());
 
@@ -67,8 +67,8 @@ public class WorkflowConfigReader {
   }
 
   private WorkflowActionDTO parseAction(Map<String, Object> actionConfig) {
-    String actionName = (String) actionConfig.get(workflowConfigKey.ACTION);
-    List<WorkflowActionParameterDTO> parameters = parseParameters(actionConfig.get(workflowConfigKey.PARAMS));
+    String actionName = (String) actionConfig.get(workflowConfigKey.action);
+    List<WorkflowActionParameterDTO> parameters = parseParameters(actionConfig.get(workflowConfigKey.params));
 
     return new WorkflowActionDTO(actionName, parameters);
   }
@@ -84,9 +84,9 @@ public class WorkflowConfigReader {
   }
 
   private WorkflowActionParameterDTO parseParameter(Map<String, Object> paramConfig) {
-    String paramName = (String) paramConfig.get(workflowConfigKey.PARAM_NAME);
-    String paramType = (String) paramConfig.get(workflowConfigKey.PARAM_TYPE);
-    Object paramValue = paramConfig.get(workflowConfigKey.PARAM_VALUE);
+    String paramName = (String) paramConfig.get(workflowConfigKey.param_name);
+    String paramType = (String) paramConfig.get(workflowConfigKey.param_type);
+    Object paramValue = paramConfig.get(workflowConfigKey.param_value);
 
     return new WorkflowActionParameterDTO(paramName, WorkflowActionParameterType.fromString(paramType), paramValue);
   }
