@@ -13,23 +13,23 @@ import org.springframework.context.annotation.Configuration;
 public class WorkflowConfigKey {
 
   @Value("${workflow.config.signal}")
-  public String SIGNAL;
+  public String signal;
 
   @Value("${workflow.config.actions}")
-  public String ACTIONS;
+  public String actions;
 
   @Value("${workflow.config.action}")
-  public String ACTION;
+  public String action;
 
   @Value("${workflow.config.params}")
-  public String PARAMS;
+  public String params;
 
   @Value("${workflow.config.param.name}")
-  public String PARAM_NAME;
+  public String param_name;
 
   @Value("${workflow.config.param.type}")
-  public String PARAM_TYPE;
+  public String param_type;
 
   @Value("${workflow.config.param.value}")
-  public String PARAM_VALUE;
+  public String param_value;
 }
