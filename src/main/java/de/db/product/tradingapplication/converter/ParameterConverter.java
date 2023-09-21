@@ -19,6 +19,6 @@ public class ParameterConverter {
   }
 
   public WorkflowActionParameter fromDTO(WorkflowAction action, WorkflowActionParameterDTO parameterDTO) {
-    return new WorkflowActionParameter(parameterDTO.name(), parameterDTO.type(), (Integer) parameterDTO.value(), action);
+    return new WorkflowActionParameter(parameterDTO.name(), parameterDTO.type(), parameterDTO.value().toString(), action);
   }
 }

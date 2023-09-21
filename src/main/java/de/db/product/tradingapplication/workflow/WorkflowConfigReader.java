@@ -1,6 +1,7 @@
 package de.db.product.tradingapplication.workflow;
 import de.db.product.tradingapplication.dto.WorkflowActionDTO;
 import de.db.product.tradingapplication.dto.WorkflowActionParameterDTO;
+import de.db.product.tradingapplication.model.WorkflowActionParameterType;
 import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
@@ -87,7 +88,7 @@ public class WorkflowConfigReader {
     String paramType = (String) paramConfig.get(workflowConfigKey.PARAM_TYPE);
     Object paramValue = paramConfig.get(workflowConfigKey.PARAM_VALUE);
 
-    return new WorkflowActionParameterDTO(paramName, paramType, paramValue);
+    return new WorkflowActionParameterDTO(paramName, WorkflowActionParameterType.fromString(paramType), paramValue);
   }
 
   public List<WorkflowActionDTO> getWorkflow(Integer signal) {

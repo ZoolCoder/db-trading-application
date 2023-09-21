@@ -27,9 +27,9 @@ public class WorkflowActionParameter extends BaseEntity {
   @Column(nullable = false)
   private String name;
   @Column(nullable = false)
-  private String type;
+  private WorkflowActionParameterType type;
   @Column(nullable = false)
-  private Integer paramValue;
+  private String paramValue;
 
   @ManyToOne
   @JoinColumn(name = "action_id")

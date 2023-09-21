@@ -2,6 +2,7 @@ package de.db.product.tradingapplication.workflow;
 
 import de.db.product.tradingapplication.dto.WorkflowActionDTO;
 import de.db.product.tradingapplication.dto.WorkflowActionParameterDTO;
+import de.db.product.tradingapplication.model.WorkflowActionParameterType;
 import java.lang.reflect.Method;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +57,7 @@ public class SignalExecutor {
 
     for (int i = 0; i < parameters.size(); i++) {
       WorkflowActionParameterDTO parameter = parameters.get(i);
-      String paramType = parameter.type();
+      WorkflowActionParameterType paramType = parameter.type();
       Object paramValue = parameter.value();
 
       // Convert paramValue to the appropriate type
@@ -66,9 +67,9 @@ public class SignalExecutor {
     return paramValues;
   }
 
-  private Object convertValue(String type, Object value) {
-    switch (type.toLowerCase()) {
-      case "int":
+  private Object convertValue(WorkflowActionParameterType type, Object value) {
+    switch (type) {
+      case INT:
         return Integer.parseInt(value.toString());
       // Add more cases for other types as needed
       default:
