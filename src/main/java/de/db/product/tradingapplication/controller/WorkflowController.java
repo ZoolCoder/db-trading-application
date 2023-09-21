@@ -19,13 +19,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/workflows")
+@RequestMapping("/workflow")
 public class WorkflowController {
 
   private final WorkflowService workflowService;
-  private final SignalExecutor signalExecutor;
 
-  @GetMapping
+  @GetMapping("/getAll")
   public ResponseEntity<List<WorkflowDTO>> getAllWorkflows() {
     List<WorkflowDTO> workflows = workflowService.getAllWorkflows();
     return new ResponseEntity<>(workflows, HttpStatus.OK);
@@ -53,17 +52,5 @@ public class WorkflowController {
   public ResponseEntity<Void> deleteWorkflow(@PathVariable Long id) {
     workflowService.deleteWorkflow(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-  }
-
-  @PostMapping("executeWorkflow/{id}")
-  public ResponseEntity<String> executeWorkflow(@RequestBody WorkflowExecutionRequest request) {
-    // Retrieve the workflow from the database by its ID
-    WorkflowDTO workflowDTO = workflowService.getWorkflowBySignalID(request.signalID());
-
-    // Implement logic to execute the workflow based on the DTO
-    workflowDTO.actions().forEach(signalExecutor::executeAction);
-
-    // Return a response indicating the execution status
-    return new ResponseEntity<>("Workflow executed successfully.", HttpStatus.OK);
   }
 }

@@ -38,7 +38,7 @@ public class SignalControllerTest {
     SignalRequest signalRequest = new SignalRequest(4);
 
     // Perform an HTTP POST request to the /api/signals endpoint
-    mockMvc.perform(MockMvcRequestBuilders.post("/api/signals")
+    mockMvc.perform(MockMvcRequestBuilders.post("/signal/process")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(signalRequest)))
         .andExpect(MockMvcResultMatchers.status().isOk())
@@ -52,7 +52,7 @@ public class SignalControllerTest {
     SignalRequest signalRequest = new SignalRequest(2);
 
     // Perform an HTTP POST request to the /api/configureSignals endpoint
-    mockMvc.perform(MockMvcRequestBuilders.post("/api/configureSignals")
+    mockMvc.perform(MockMvcRequestBuilders.post("/signal/processConfigureWorkflow")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(signalRequest)))
         .andExpect(MockMvcResultMatchers.status().isOk())
