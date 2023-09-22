@@ -8,10 +8,10 @@ signal-workflow:
       - action: setAlgoParam
         params:
           - name: param
-            type: int
+            type: INT
             value: 1
           - name: value
-            type: int
+            type: INT
             value: 60
       - action: performCalc
       - action: submitToMarket
@@ -21,10 +21,10 @@ signal-workflow:
       - action: setAlgoParam
         params:
           - name: param
-            type: int
+            type: INT
             value: 1
           - name: value
-            type: int
+            type: INT
             value: 80
       - action: submitToMarket
   - signal: 3
@@ -32,7 +32,7 @@ signal-workflow:
       - action: setAlgoParam
         params:
           - name: param
-            type: int
+            type: INT
             value: 1
           - name: value
             type: int
@@ -40,7 +40,7 @@ signal-workflow:
       - action: setAlgoParam
         params:
           - name: param
-            type: int
+            type: INT
             value: 2
           - name: value
             type: int

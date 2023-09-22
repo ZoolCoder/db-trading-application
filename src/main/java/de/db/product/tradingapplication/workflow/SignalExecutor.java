@@ -1,7 +1,12 @@
 package de.db.product.tradingapplication.workflow;
 
+import de.db.product.tradingapplication.dto.WorkflowActionDTO;
+import de.db.product.tradingapplication.dto.WorkflowActionParameterDTO;
+import de.db.product.tradingapplication.model.WorkflowActionParameterType;
 import java.lang.reflect.Method;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 /**
  * .
@@ -9,11 +14,12 @@ import java.util.List;
  * @author Abdallah Emad.
  * @since 20-9-2023
  */
+@Component
 public class SignalExecutor {
 
-  public void executeAction(Action action) {
-    String actionName = action.actionName();
-    List<Parameter> parameters = action.parameters();
+  public void executeAction(WorkflowActionDTO workflowActionDTO) {
+    String actionName = workflowActionDTO.name();
+    List<WorkflowActionParameterDTO> parameters = workflowActionDTO.parameters();
     try {
       // Find the Algo class using reflection
       Class<?> algoClass = Class.forName("de.db.product.tradingapplication.invoker.Algo");
@@ -46,12 +52,12 @@ public class SignalExecutor {
     return null;
   }
 
-  private Object[] getParameterValues(Class<?>[] paramTypes, List<Parameter> parameters) {
+  private Object[] getParameterValues(Class<?>[] paramTypes, List<WorkflowActionParameterDTO> parameters) {
     Object[] paramValues = new Object[parameters.size()];
 
     for (int i = 0; i < parameters.size(); i++) {
-      Parameter parameter = parameters.get(i);
-      String paramType = parameter.type();
+      WorkflowActionParameterDTO parameter = parameters.get(i);
+      WorkflowActionParameterType paramType = parameter.type();
       Object paramValue = parameter.value();
 
       // Convert paramValue to the appropriate type
@@ -61,9 +67,9 @@ public class SignalExecutor {
     return paramValues;
   }
 
-  private Object convertValue(String type, Object value) {
-    switch (type.toLowerCase()) {
-      case "int":
+  private Object convertValue(WorkflowActionParameterType type, Object value) {
+    switch (type) {
+      case INT:
         return Integer.parseInt(value.toString());
       // Add more cases for other types as needed
       default:

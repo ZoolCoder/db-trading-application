@@ -1,5 +1,6 @@
 package de.db.product.tradingapplication.workflow;
 
+import de.db.product.tradingapplication.dto.WorkflowActionDTO;
 import java.util.List;
 import java.util.Map;
 
@@ -11,13 +12,13 @@ import java.util.Map;
  */
 public class WorkflowConfig {
 
-  private final Map<String, List<Action>> workflow;
+  private final Map<String, List<WorkflowActionDTO>> workflow;
 
-  public WorkflowConfig(Map<String, List<Action>> workflow) {
+  public WorkflowConfig(Map<String, List<WorkflowActionDTO>> workflow) {
     this.workflow = workflow;
   }
 
-  public List<Action> getActionsForCommand(String command) {
+  public List<WorkflowActionDTO> getActionsForCommand(String command) {
     return workflow.getOrDefault(command, List.of());
   }
 }

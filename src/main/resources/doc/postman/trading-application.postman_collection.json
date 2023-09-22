@@ -1,0 +1,233 @@
+{
+	"info": {
+		"_postman_id": "21616d5b-8bda-44dc-b875-1ae9fc7283d8",
+		"name": "trading-application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29549192"
+	},
+	"item": [
+		{
+			"name": "signal",
+			"item": [
+				{
+					"name": "process",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"signal\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/signal/process",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"signal",
+								"process"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "process from configuration",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"signal\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/signal/processConfigureWorkflow",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"signal",
+								"processConfigureWorkflow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "execute workflow",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"signalID\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/signal/processStoredWorkflow",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"signal",
+								"processStoredWorkflow"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "workflow",
+			"item": [
+				{
+					"name": "GetWorkflows",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/workflow/getAll",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"workflow",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add workflow",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"signalID\": 1,\r\n    \"actions\": [\r\n        {\r\n            \"name\": \"setUp\"\r\n        },\r\n        {\r\n            \"name\": \"setAlgoParam\",\r\n            \"parameters\": [\r\n                {\r\n                    \"name\": \"param\",\r\n                    \"type\": \"INT\",\r\n                    \"value\": 1\r\n                },\r\n                {\r\n                    \"name\": \"value\",\r\n                    \"type\": \"INT\",\r\n                    \"value\": 60\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"name\": \"performCalc\"\r\n        },\r\n        {\r\n            \"name\": \"submitToMarket\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/workflow",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"workflow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update workflow",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"signalID\": 3,\r\n    \"actions\": [\r\n        {\r\n            \"name\": \"setUp\",\r\n            \"parameters\": null\r\n        },\r\n        {\r\n            \"name\": \"setAlgoParam\",\r\n            \"parameters\": [\r\n                {\r\n                    \"name\": \"param\",\r\n                    \"type\": \"INT\",\r\n                    \"value\": \"1\"\r\n                },\r\n                {\r\n                    \"name\": \"value\",\r\n                    \"type\": \"INT\",\r\n                    \"value\": \"60\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"name\": \"performCalc\",\r\n            \"parameters\": null\r\n        },\r\n        {\r\n            \"name\": \"submitToMarket\",\r\n            \"parameters\": null\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/workflow/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"workflow",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete workflow",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/workflow/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"workflow",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetWorkflowsByID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/workflow/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"workflow",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

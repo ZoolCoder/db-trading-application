@@ -1,4 +1,7 @@
 package de.db.product.tradingapplication.workflow;
+import de.db.product.tradingapplication.dto.WorkflowActionDTO;
+import de.db.product.tradingapplication.dto.WorkflowActionParameterDTO;
+import de.db.product.tradingapplication.model.WorkflowActionParameterType;
 import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,16 +15,16 @@ import org.yaml.snakeyaml.Yaml;
 @Component
 public class WorkflowConfigReader {
 
-  private static final String filePath = "signal-workflow.yaml";
+  private static final String WORKFLOW_CONFIGURATION = "signal-workflow.yaml";
 
   private final WorkflowConfigKey workflowConfigKey;
-  private Map<Integer, List<Action>> workflowConfig;
+  private Map<Integer, List<WorkflowActionDTO>> workflowConfig;
   @PostConstruct
   public void init() {
     System.out.println("Initializing WorkflowConfig...");
-    workflowConfig = readWorkflowConfig(filePath);
+    workflowConfig = readWorkflowConfig(WORKFLOW_CONFIGURATION);
   }
-  public Map<Integer, List<Action>> readWorkflowConfig(String filePath) {
+  public Map<Integer, List<WorkflowActionDTO>> readWorkflowConfig(String filePath) {
     Map<String, List<Map<String, Object>>> workflowConfig = null;
 
     try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath)) {
@@ -37,24 +40,24 @@ public class WorkflowConfigReader {
     return parseWorkflowConfig(workflowConfig);
   }
 
-  private Map<Integer, List<Action>> parseWorkflowConfig(Map<String, List<Map<String, Object>>> config) {
-    Map<Integer, List<Action>> result = new HashMap<>();
+  private Map<Integer, List<WorkflowActionDTO>> parseWorkflowConfig(Map<String, List<Map<String, Object>>> config) {
+    Map<Integer, List<WorkflowActionDTO>> result = new HashMap<>();
 
     config.forEach((signalKey, signalConfigList) -> {
 
-      List<Action> actions = signalConfigList.stream()
+      signalConfigList.stream()
           .map(signalConfig -> {
-            Integer signal = (Integer) signalConfig.get(workflowConfigKey.SIGNAL);
-            List<Map<String, Object>> actionList = (List<Map<String, Object>>) signalConfig.get(workflowConfigKey.ACTIONS);
+            Integer signal = (Integer) signalConfig.get(workflowConfigKey.signal);
+            List<Map<String, Object>> actionList = (List<Map<String, Object>>) signalConfig.get(workflowConfigKey.actions);
 
-            List<Action> actionObjects = actionList.stream()
+            List<WorkflowActionDTO> workflowActionDTOObjects = actionList.stream()
                 .map(actionConfig -> {
-                  return new Action((String) actionConfig.get(workflowConfigKey.ACTION), parseParameters(actionConfig.get(workflowConfigKey.PARAMS)));
+                  return new WorkflowActionDTO((String) actionConfig.get(workflowConfigKey.action), parseParameters(actionConfig.get(workflowConfigKey.params)));
                 })
                 .collect(Collectors.toList());
 
-            result.put(signal, actionObjects);
-            return actionObjects;
+            result.put(signal, workflowActionDTOObjects);
+            return workflowActionDTOObjects;
           })
           .flatMap(List::stream)
           .collect(Collectors.toList());
@@ -63,14 +66,14 @@ public class WorkflowConfigReader {
     return result;
   }
 
-  private Action parseAction(Map<String, Object> actionConfig) {
-    String actionName = (String) actionConfig.get(workflowConfigKey.ACTION);
-    List<Parameter> parameters = parseParameters(actionConfig.get(workflowConfigKey.PARAMS));
+  private WorkflowActionDTO parseAction(Map<String, Object> actionConfig) {
+    String actionName = (String) actionConfig.get(workflowConfigKey.action);
+    List<WorkflowActionParameterDTO> parameters = parseParameters(actionConfig.get(workflowConfigKey.params));
 
-    return new Action(actionName, parameters);
+    return new WorkflowActionDTO(actionName, parameters);
   }
 
-  private List<Parameter> parseParameters(Object paramsConfig) {
+  private List<WorkflowActionParameterDTO> parseParameters(Object paramsConfig) {
     if (!(paramsConfig instanceof List)) {
       return Collections.emptyList();
     }
@@ -80,15 +83,15 @@ public class WorkflowConfigReader {
         .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
   }
 
-  private Parameter parseParameter(Map<String, Object> paramConfig) {
-    String paramName = (String) paramConfig.get(workflowConfigKey.PARAM_NAME);
-    String paramType = (String) paramConfig.get(workflowConfigKey.PARAM_TYPE);
-    Object paramValue = paramConfig.get(workflowConfigKey.PARAM_VALUE);
+  private WorkflowActionParameterDTO parseParameter(Map<String, Object> paramConfig) {
+    String paramName = (String) paramConfig.get(workflowConfigKey.param_name);
+    String paramType = (String) paramConfig.get(workflowConfigKey.param_type);
+    Object paramValue = paramConfig.get(workflowConfigKey.param_value);
 
-    return new Parameter(paramName, paramType, paramValue);
+    return new WorkflowActionParameterDTO(paramName, WorkflowActionParameterType.fromString(paramType), paramValue);
   }
 
-  public List<Action> getWorkflow(Integer signal) {
+  public List<WorkflowActionDTO> getWorkflow(Integer signal) {
     return workflowConfig.getOrDefault(signal, List.of());
   }
 }

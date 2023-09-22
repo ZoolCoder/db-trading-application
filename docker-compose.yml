@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  # Spring Boot application
+  trading-application:
+    image: trading-application:latest
+    build:
+      context: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/tradingdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+  # PostgreSQL database
+  database:
+    image: postgres
+    container_name: trading-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: tradingdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
